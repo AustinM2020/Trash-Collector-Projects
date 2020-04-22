@@ -30,12 +30,6 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PickUpDay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PickUpDay)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ExtraPickUp)
         </dt>
         <dd class = "col-sm-10">
@@ -64,6 +58,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdentityUser.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WeekDay)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WeekDay.Id)
         </dd>
     </dl>
 </div>

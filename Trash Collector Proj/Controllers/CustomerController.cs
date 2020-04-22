@@ -10,23 +10,23 @@ using Trash_Collector_Proj.Models;
 
 namespace Trash_Collector_Proj.Controllers
 {
-    public class CustomersController : Controller
+    public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomerController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Customers
+        // GET: Customer
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
+            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser).Include(c => c.WeekDay);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Customers/Details/5
+        // GET: Customer/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +36,7 @@ namespace Trash_Collector_Proj.Controllers
 
             var customer = await _context.Customers
                 .Include(c => c.IdentityUser)
+                .Include(c => c.WeekDay)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -45,19 +46,20 @@ namespace Trash_Collector_Proj.Controllers
             return View(customer);
         }
 
-        // GET: Customers/Create
+        // GET: Customer/Create
         public IActionResult Create()
         {
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Name");
             return View();
         }
 
-        // POST: Customers/Create
+        // POST: Customer/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Zipcode,Address,PickUpDay,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,DayId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -66,10 +68,11 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
             return View(customer);
         }
 
-        // GET: Customers/Edit/5
+        // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,15 +86,16 @@ namespace Trash_Collector_Proj.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
             return View(customer);
         }
 
-        // POST: Customers/Edit/5
+        // POST: Customer/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Zipcode,Address,PickUpDay,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,DayId")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -119,10 +123,11 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
             return View(customer);
         }
 
-        // GET: Customers/Delete/5
+        // GET: Customer/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,6 +137,7 @@ namespace Trash_Collector_Proj.Controllers
 
             var customer = await _context.Customers
                 .Include(c => c.IdentityUser)
+                .Include(c => c.WeekDay)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -141,7 +147,7 @@ namespace Trash_Collector_Proj.Controllers
             return View(customer);
         }
 
-        // POST: Customers/Delete/5
+        // POST: Customer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
