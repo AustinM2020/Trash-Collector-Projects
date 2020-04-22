@@ -28,7 +28,6 @@ namespace Trash_Collector_Proj.Data
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<Address> Addresses { get; set; }
-
+        public DbSet<WeekDay> WeekDays { get; set; }
     }
 }

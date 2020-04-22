@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Trash_Collector_Proj.Models
 {
-    public class Address
+    public class WeekDay
     {
         [Key]
         public int Id { get; set; }
-        public string Zipcode { get; set; }
-        public string UserAddress { get; set; }
+        public string Name { get; set; }
     }
 }

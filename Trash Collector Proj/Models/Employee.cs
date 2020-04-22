@@ -13,13 +13,10 @@ namespace Trash_Collector_Proj.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Zipcode { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
-
-        [ForeignKey("Address")]
-        public int AddressId { get; set; }
-        public Address Address { get; set; }
     }
 }
