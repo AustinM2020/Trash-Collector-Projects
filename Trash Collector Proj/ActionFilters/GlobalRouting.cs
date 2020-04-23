@@ -27,7 +27,7 @@ namespace Trash_Collector_Proj.ActionFilters
                 }
                 else if (_claimsPrincipal.IsInRole("Employee"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Employees", null); 
+                    context.Result = new RedirectToActionResult("Index", "Employee", null); 
                 }
             }
         }

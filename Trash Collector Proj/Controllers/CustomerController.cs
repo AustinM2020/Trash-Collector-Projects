@@ -24,9 +24,15 @@ namespace Trash_Collector_Proj.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var myCustomerProfile = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            var applicationDbContex = _context.Customers.Include(c => c.IdentityUser);
-            return View(await applicationDbContex.ToListAsync());
+            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).ToList();
+            if (customer == null)
+            {
+                return RedirectToAction("Create");
+            }
+            else
+            {
+                return View(customer);
+            }
         }
 
         // GET: Customer/Details/5
