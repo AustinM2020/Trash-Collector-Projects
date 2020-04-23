@@ -25,6 +25,7 @@ namespace Trash_Collector_Proj.Controllers
         public async Task<IActionResult> Index()
         {
             string dayOfWeek = DateTime.Today.DayOfWeek.ToString();
+            int date = DateTime.Today.DayOfYear;
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if (employee == null)
@@ -33,18 +34,29 @@ namespace Trash_Collector_Proj.Controllers
             }
             else
             {
-                var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).ToList();
+                var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                foreach (var person in extraDayCustomers)
+                {
+                    if (person.ExtraPickUp.HasValue)
+                    {
+                        if (person.ExtraPickUp.Value.DayOfYear == date)
+                        {
+                            customers.Add(person);
+                            person.ExtraPickUp = null;
+                        } 
+                    }
+                }
+                foreach (var person in customers)
+                {
+                    person.Balance = person.Balance + pricePerPickup;
+                    _context.Update(person);
+                    _context.SaveChanges();
+                }
                 return View(customers);
             }
         }
-        public async Task<IActionResult> ChargeCustomers(int? Id)
-        {
-            var customer = _context.Customers.Find(Id);
-            customer.Balance = customer.Balance + pricePerPickup;
-            _context.Update(customer);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
-        }
+
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)
         {

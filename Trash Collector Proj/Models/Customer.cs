@@ -20,9 +20,9 @@ namespace Trash_Collector_Proj.Models
         [DisplayName("Extra Pick Up Date")]
         public DateTime? ExtraPickUp { get; set; }
         [DisplayName("Start Pick Up")]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
         [DisplayName("End Pick Up")]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
         public double Balance { get; set; }
 
 
