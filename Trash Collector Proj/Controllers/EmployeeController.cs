@@ -13,6 +13,7 @@ namespace Trash_Collector_Proj.Controllers
 {
     public class EmployeeController : Controller
     {
+        public double pricePerPickup = 5;
         private readonly ApplicationDbContext _context;
 
         public EmployeeController(ApplicationDbContext context)
@@ -23,6 +24,7 @@ namespace Trash_Collector_Proj.Controllers
         // GET: Employee
         public async Task<IActionResult> Index()
         {
+            string dayOfWeek = DateTime.Today.DayOfWeek.ToString();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if (employee == null)
@@ -31,11 +33,18 @@ namespace Trash_Collector_Proj.Controllers
             }
             else
             {
-                var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode).ToList();
+                var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).ToList();
                 return View(customers);
             }
         }
-
+        public async Task<IActionResult> ChargeCustomers(int? Id)
+        {
+            var customer = _context.Customers.Find(Id);
+            customer.Balance = customer.Balance + pricePerPickup;
+            _context.Update(customer);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)
         {

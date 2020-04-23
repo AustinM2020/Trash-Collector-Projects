@@ -25,7 +25,7 @@ namespace Trash_Collector_Proj.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(c => c.IdentityUserId == userId).ToList();
-            if (customer == null)
+            if (customer.Count == 0)
             {
                 return RedirectToAction("Create");
             }
