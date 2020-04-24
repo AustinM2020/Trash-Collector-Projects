@@ -24,6 +24,7 @@ namespace Trash_Collector_Proj.Models
         [DisplayName("End Pick Up")]
         public DateTime EndDate { get; set; }
         public double Balance { get; set; }
+        public bool TrashPickedUp { get; set; }
 
 
         [ForeignKey("IdentityUser")]

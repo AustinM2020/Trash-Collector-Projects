@@ -80,6 +80,7 @@ namespace Trash_Collector_Proj.Controllers
         {
             var customer = _context.Customers.Find(Id);
             customer.Balance = customer.Balance + pricePerPickup;
+            customer.TrashPickedUp = true;
             _context.Update(customer);
             _context.SaveChanges();
             return RedirectToAction("Index");
