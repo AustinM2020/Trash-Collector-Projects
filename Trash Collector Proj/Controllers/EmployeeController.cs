@@ -24,6 +24,7 @@ namespace Trash_Collector_Proj.Controllers
         // GET: Employee
         public async Task<IActionResult> Index(string searchDay)
         {
+            ResetPickUp();
             string dayOfWeek;
             string extraDay;
             int date = DateTime.Today.DayOfYear;
@@ -39,10 +40,11 @@ namespace Trash_Collector_Proj.Controllers
                 if(searchDay == "Today" || searchDay == null)
                 {
                     dayOfWeek = DateTime.Today.DayOfWeek.ToString();
-                    var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                    var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today && c.TrashPickedUp == false).ToList();
                     var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
                     foreach (var person in extraDayCustomers)
                     {
+
                         if (person.ExtraPickUp.HasValue)
                         {
                             if (person.ExtraPickUp.Value.DayOfYear == date)
@@ -61,7 +63,7 @@ namespace Trash_Collector_Proj.Controllers
                     var filteredCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).ToList();
                     var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode).ToList();
                     foreach (var person in extraDayCustomers)
-                    {
+                    {                       
                         if (person.ExtraPickUp.HasValue)
                         {
                             if (person.ExtraPickUp.Value.DayOfWeek.ToString() == searchDay)
@@ -76,9 +78,27 @@ namespace Trash_Collector_Proj.Controllers
                
             }
         }
+        public IActionResult ResetPickUp()
+        {
+            DateTime dateTime = DateTime.Now;
+            TimeSpan difference;
+            var customers = _context.Customers.Select(c => c).ToList();
+            foreach (var person in customers)
+            {
+                difference = dateTime - person.PickUpTIme;
+                if (difference.Days >= 1)
+                {
+                    person.TrashPickedUp = false;
+                    _context.Update(person);
+                    _context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
+        }
         public IActionResult ChargeCustomer(int? Id)
         {
             var customer = _context.Customers.Find(Id);
+            customer.PickUpTIme = DateTime.Now;
             customer.Balance = customer.Balance + pricePerPickup;
             customer.TrashPickedUp = true;
             _context.Update(customer);
