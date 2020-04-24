@@ -22,9 +22,10 @@ namespace Trash_Collector_Proj.Controllers
         }
 
         // GET: Employee
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchDay)
         {
-            string dayOfWeek = DateTime.Today.DayOfWeek.ToString();
+            string dayOfWeek;
+            string extraDay;
             int date = DateTime.Today.DayOfYear;
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Where(c => c.IdentityUserId == userId).FirstOrDefault();
@@ -34,29 +35,55 @@ namespace Trash_Collector_Proj.Controllers
             }
             else
             {
-                var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
-                var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
-                foreach (var person in extraDayCustomers)
+                ViewData["CurrentFilter"] = searchDay;
+                if(searchDay == "Today" || searchDay == null)
                 {
-                    if (person.ExtraPickUp.HasValue)
+                    dayOfWeek = DateTime.Today.DayOfWeek.ToString();
+                    var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                    foreach (var person in extraDayCustomers)
                     {
-                        if (person.ExtraPickUp.Value.DayOfYear == date)
+                        if (person.ExtraPickUp.HasValue)
                         {
-                            customers.Add(person);
-                            person.ExtraPickUp = null;
-                        } 
+                            if (person.ExtraPickUp.Value.DayOfYear == date)
+                            {
+                                customers.Add(person);
+                                person.ExtraPickUp = null;
+                            }
+                        }
                     }
+                    return View(customers);
                 }
-                foreach (var person in customers)
+                else
                 {
-                    person.Balance = person.Balance + pricePerPickup;
-                    _context.Update(person);
-                    _context.SaveChanges();
+                    dayOfWeek = searchDay;
+                    extraDay = searchDay;
+                    var filteredCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).ToList();
+                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode).ToList();
+                    foreach (var person in extraDayCustomers)
+                    {
+                        if (person.ExtraPickUp.HasValue)
+                        {
+                            if (person.ExtraPickUp.Value.DayOfWeek.ToString() == searchDay)
+                            {
+                                filteredCustomers.Add(person);
+                                person.ExtraPickUp = null;
+                            }
+                        }
+                    }
+                    return View(filteredCustomers);
                 }
-                return View(customers);
+               
             }
         }
-
+        public IActionResult ChargeCustomer(int? Id)
+        {
+            var customer = _context.Customers.Find(Id);
+            customer.Balance = customer.Balance + pricePerPickup;
+            _context.Update(customer);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)
         {

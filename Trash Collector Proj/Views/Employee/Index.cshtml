@@ -6,10 +6,24 @@
 }
 
 <h1>Index</h1>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <h5>
+            <select name="SearchDay" value="@ViewData["currentFilter"]">
+                <option value="Today">Today</option>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+            </select>
+            <input type="submit" value="Search" class="btn btn-default" />
+        </h5>
+    </div>
+</form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -51,9 +65,8 @@
                     @Html.DisplayFor(modelItem => item.Balance)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="ChargeCustomer" asp-route-id="@item.Id">Confirm Pick Up</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
