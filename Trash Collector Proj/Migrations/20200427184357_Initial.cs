@@ -226,8 +226,8 @@ namespace Trash_Collector_Proj.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9a562e15-754c-4eee-8fc3-d9c18d385f28", "45c1fea7-b935-4d34-b6eb-c4088f206a86", "Customer", "CUSTOMER" },
-                    { "f32bc52a-6c3c-426f-b78d-3f90f4f0d697", "854560c2-3885-4694-9833-20ed6e58a965", "Employee", "EMPLOYEE" }
+                    { "9ceeaa85-f8a6-4926-8be9-736e3eaae273", "3bfc4c06-ba5b-49af-8cf1-91e5bea18e9c", "Customer", "CUSTOMER" },
+                    { "6b554bc7-56b7-422c-b4d1-ebed6de76f1e", "207fe41d-5068-4fe0-b89d-a6baa1ab3863", "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(

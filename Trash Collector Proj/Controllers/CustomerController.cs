@@ -20,6 +20,10 @@ namespace Trash_Collector_Proj.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Home()
+        {
+            return View();
+        }
         // GET: Customer
         public async Task<IActionResult> Index()
         {
@@ -59,7 +63,7 @@ namespace Trash_Collector_Proj.Controllers
         public IActionResult Create()
         {
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Name");
+            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Name");
             return View();
         }
 
@@ -68,7 +72,7 @@ namespace Trash_Collector_Proj.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,DayId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,WeekDayId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +83,7 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
+            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 
@@ -97,7 +101,7 @@ namespace Trash_Collector_Proj.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
+            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 
@@ -106,7 +110,7 @@ namespace Trash_Collector_Proj.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,DayId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,WeekDayId")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -136,7 +140,7 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
+            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 

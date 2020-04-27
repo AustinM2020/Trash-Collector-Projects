@@ -21,6 +21,11 @@ namespace Trash_Collector_Proj.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Home()
+        {
+            return View();
+        }
+
         // GET: Employee
         public async Task<IActionResult> Index(string searchDay)
         {
