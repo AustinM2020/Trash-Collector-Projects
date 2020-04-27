@@ -82,6 +82,10 @@ namespace Trash_Collector_Proj.Controllers
                
             }
         }
+        public IActionResult Map()
+        {
+            return View();
+        }
         public IActionResult ResetPickUp()
         {
             DateTime dateTime = DateTime.Now;
@@ -108,6 +112,24 @@ namespace Trash_Collector_Proj.Controllers
             _context.Update(customer);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> CustomerDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customers
+                .Include(c => c.IdentityUser)
+                .Include(c => c.WeekDay)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return View(customer);
         }
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)
