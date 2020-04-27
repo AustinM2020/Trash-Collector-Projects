@@ -26,7 +26,19 @@ namespace Trash_Collector_Proj.Data
             builder.Entity<IdentityRole>()
                 .HasData(new IdentityRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
             builder.Entity<WeekDay>()
-                .HasData(new)
+                .HasData(new WeekDay { Id = 1, Name = "Sunday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 2, Name = "Monday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 3, Name = "Tuesday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 4, Name = "Wednesday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 5, Name = "Thursday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 6, Name = "Friday" });
+            builder.Entity<WeekDay>()
+                .HasData(new WeekDay { Id = 7, Name = "Saturday" });
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
