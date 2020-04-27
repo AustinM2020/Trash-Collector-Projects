@@ -47,6 +47,19 @@ namespace Trash_Collector_Proj.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WeekDays",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeekDays", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -153,33 +166,6 @@ namespace Trash_Collector_Proj.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    Zipcode = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
-                    PickUpDay = table.Column<int>(nullable: false),
-                    ExtraPickUp = table.Column<DateTime>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    Balance = table.Column<double>(nullable: false),
-                    IdentityUserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Customers_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -200,20 +186,55 @@ namespace Trash_Collector_Proj.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "970c38c1-99e7-4239-9b44-30bfa8607c8c", "a71a8de6-91bb-4b1b-8289-a88c6612531e", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false),
+                    Zipcode = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    ExtraPickUp = table.Column<DateTime>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    Balance = table.Column<double>(nullable: false),
+                    TrashPickedUp = table.Column<bool>(nullable: false),
+                    PickUpTIme = table.Column<DateTime>(nullable: false),
+                    IdentityUserId = table.Column<string>(nullable: true),
+                    DayId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customers_WeekDays_DayId",
+                        column: x => x.DayId,
+                        principalTable: "WeekDays",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Customers_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "09af7c8c-1fdb-4c94-b64f-95a00b7e0b92", "5cca8e35-39c2-4113-9209-c664559c9e16", "Customer", "CUSTOMER" });
+                values: new object[] { "2552a0c3-da2f-4ba3-9259-2b8fb98a6811", "fb34bfa5-ffa9-4655-81a7-9fe1a5b470b5", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c4fe2a1a-5b41-401e-8224-775bca2c409e", "f76b043c-6065-4d27-92b6-dddb7a10ab78", "Employee", "EMPLOYEE" });
+                values: new object[] { "6f02511f-22fa-42eb-81ae-e9ea916e3a2a", "cd91105b-bd02-4d11-a3ae-cda6c08464ad", "Customer", "CUSTOMER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "00719e60-e595-4a49-8627-1d181b06f171", "294c6b5e-917c-45c0-ab01-b65640d729b7", "Employee", "EMPLOYEE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -255,6 +276,11 @@ namespace Trash_Collector_Proj.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customers_DayId",
+                table: "Customers",
+                column: "DayId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Customers_IdentityUserId",
                 table: "Customers",
                 column: "IdentityUserId");
@@ -290,6 +316,9 @@ namespace Trash_Collector_Proj.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "WeekDays");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

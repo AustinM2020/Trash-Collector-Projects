@@ -25,6 +25,8 @@ namespace Trash_Collector_Proj.Data
                 .HasData(new IdentityRole { Name = "Customer", NormalizedName = "CUSTOMER" });
             builder.Entity<IdentityRole>()
                 .HasData(new IdentityRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
+            builder.Entity<WeekDay>()
+                .HasData(new)
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }

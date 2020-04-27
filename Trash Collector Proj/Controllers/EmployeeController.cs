@@ -44,7 +44,6 @@ namespace Trash_Collector_Proj.Controllers
                     var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
                     foreach (var person in extraDayCustomers)
                     {
-
                         if (person.ExtraPickUp.HasValue)
                         {
                             if (person.ExtraPickUp.Value.DayOfYear == date)
