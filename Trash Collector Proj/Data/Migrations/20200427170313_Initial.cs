@@ -202,39 +202,47 @@ namespace Trash_Collector_Proj.Migrations
                     TrashPickedUp = table.Column<bool>(nullable: false),
                     PickUpTIme = table.Column<DateTime>(nullable: false),
                     IdentityUserId = table.Column<string>(nullable: true),
-                    DayId = table.Column<int>(nullable: false)
+                    WeekDayId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Customers_WeekDays_DayId",
-                        column: x => x.DayId,
-                        principalTable: "WeekDays",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Customers_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Customers_WeekDays_WeekDayId",
+                        column: x => x.WeekDayId,
+                        principalTable: "WeekDays",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2552a0c3-da2f-4ba3-9259-2b8fb98a6811", "fb34bfa5-ffa9-4655-81a7-9fe1a5b470b5", "Admin", "ADMIN" });
+                values: new object[,]
+                {
+                    { "9a562e15-754c-4eee-8fc3-d9c18d385f28", "45c1fea7-b935-4d34-b6eb-c4088f206a86", "Customer", "CUSTOMER" },
+                    { "f32bc52a-6c3c-426f-b78d-3f90f4f0d697", "854560c2-3885-4694-9833-20ed6e58a965", "Employee", "EMPLOYEE" }
+                });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6f02511f-22fa-42eb-81ae-e9ea916e3a2a", "cd91105b-bd02-4d11-a3ae-cda6c08464ad", "Customer", "CUSTOMER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "00719e60-e595-4a49-8627-1d181b06f171", "294c6b5e-917c-45c0-ab01-b65640d729b7", "Employee", "EMPLOYEE" });
+                table: "WeekDays",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Sunday" },
+                    { 2, "Monday" },
+                    { 3, "Tuesday" },
+                    { 4, "Wednesday" },
+                    { 5, "Thursday" },
+                    { 6, "Friday" },
+                    { 7, "Saturday" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -276,14 +284,14 @@ namespace Trash_Collector_Proj.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_DayId",
-                table: "Customers",
-                column: "DayId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Customers_IdentityUserId",
                 table: "Customers",
                 column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_WeekDayId",
+                table: "Customers",
+                column: "WeekDayId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_IdentityUserId",

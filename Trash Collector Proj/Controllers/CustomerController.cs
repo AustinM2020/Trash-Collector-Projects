@@ -79,7 +79,7 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 
@@ -97,7 +97,7 @@ namespace Trash_Collector_Proj.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 
@@ -117,6 +117,8 @@ namespace Trash_Collector_Proj.Controllers
             {
                 try
                 {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    customer.IdentityUserId = userId;
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
@@ -134,7 +136,7 @@ namespace Trash_Collector_Proj.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.DayId);
+            ViewData["DayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
             return View(customer);
         }
 

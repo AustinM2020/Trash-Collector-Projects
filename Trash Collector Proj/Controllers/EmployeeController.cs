@@ -97,7 +97,7 @@ namespace Trash_Collector_Proj.Controllers
         public IActionResult ChargeCustomer(int? Id)
         {
             var customer = _context.Customers.Find(Id);
-            customer.PickUpTIme = DateTime.Now;
+            customer.PickUpTIme = DateTime.Today;
             customer.Balance = customer.Balance + pricePerPickup;
             customer.TrashPickedUp = true;
             _context.Update(customer);

@@ -10,8 +10,8 @@ using Trash_Collector_Proj.Data;
 namespace Trash_Collector_Proj.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200427151425_AddedDaysOFWeek")]
-    partial class AddedDaysOFWeek
+    [Migration("20200427170313_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,22 +50,15 @@ namespace Trash_Collector_Proj.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a3b02e3a-4699-48f1-a435-b8dbbc987142",
-                            ConcurrencyStamp = "567da1a3-34c6-4957-b12e-37de69128361",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "e7b6b725-5036-4777-9f87-5691157e1789",
-                            ConcurrencyStamp = "61c863da-33b3-4e76-ac2b-585f129034a7",
+                            Id = "9a562e15-754c-4eee-8fc3-d9c18d385f28",
+                            ConcurrencyStamp = "45c1fea7-b935-4d34-b6eb-c4088f206a86",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "036d5f1b-7a3e-4391-a2ec-7f298f805fcd",
-                            ConcurrencyStamp = "50f2c145-baa8-4082-9e8b-30edb6989478",
+                            Id = "f32bc52a-6c3c-426f-b78d-3f90f4f0d697",
+                            ConcurrencyStamp = "854560c2-3885-4694-9833-20ed6e58a965",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -253,9 +246,6 @@ namespace Trash_Collector_Proj.Migrations
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -278,14 +268,17 @@ namespace Trash_Collector_Proj.Migrations
                     b.Property<bool>("TrashPickedUp")
                         .HasColumnType("bit");
 
+                    b.Property<int>("WeekDayId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Zipcode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DayId");
-
                     b.HasIndex("IdentityUserId");
+
+                    b.HasIndex("WeekDayId");
 
                     b.ToTable("Customers");
                 });
@@ -418,15 +411,15 @@ namespace Trash_Collector_Proj.Migrations
 
             modelBuilder.Entity("Trash_Collector_Proj.Models.Customer", b =>
                 {
-                    b.HasOne("Trash_Collector_Proj.Models.WeekDay", "WeekDay")
-                        .WithMany()
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
+
+                    b.HasOne("Trash_Collector_Proj.Models.WeekDay", "WeekDay")
+                        .WithMany()
+                        .HasForeignKey("WeekDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Trash_Collector_Proj.Models.Employee", b =>

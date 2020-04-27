@@ -33,8 +33,8 @@ namespace Trash_Collector_Proj.Models
         public IdentityUser IdentityUser { get; set; }
 
         [ForeignKey("WeekDay")]
-        [DisplayName("Weekly Pick Up Day")]
-        public int DayId { get; set; }
+        [Display(Name = "Weekly Pick Up Day")]
+        public int WeekDayId { get; set; }
         public WeekDay WeekDay { get; set; }
 
         [NotMapped]
