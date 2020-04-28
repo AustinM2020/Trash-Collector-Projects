@@ -5,22 +5,19 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
-         /* Always set the map height explicitly to define the size of the div
-        * element that contains the map. */
          #map {
-             height: 100%;
+             height: 400px;
+             width: 100%;
          }
-         /* Optional: Makes the sample page fill the window. */
          html, body {
              height: 100%;
              margin: 0;
              padding: 0;
          }
-
          #floating-panel {
              position: absolute;
-             top: 100px;
-             left: 25%;
+             top: 190px;
+             left: 21.5%;
              z-index: 5;
              background-color: #fff;
              padding: 5px;
@@ -33,24 +30,23 @@
     </style>
 </head>
 <body>
+    <h1>Customer Location</h1>
     <div id="floating-panel">
-        <input id="submit" type="button" value="Geocode">
+        <input id="address" type="text" value="@ViewBag.Address">
     </div>
     <div id="map"></div>
     <script>
+        var customerAddress = "@ViewBag.Address";
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 8,
-                center: { lat: -34.397, lng: 150.644 }
+                zoom: 11
             });
             var geocoder = new google.maps.Geocoder();
 
-            for each
-            });
+            geocodeAddress(geocoder, map);
         }
-
         function geocodeAddress(geocoder, resultsMap) {
-            var address = "5555 S 110th St";
+            var address = customerAddress;
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status === 'OK') {
                     resultsMap.setCenter(results[0].geometry.location);
@@ -68,4 +64,5 @@
             src="
     </script>
 </body>
+<a asp-action="Index">Back to List</a>
 </html>
