@@ -82,8 +82,10 @@ namespace Trash_Collector_Proj.Controllers
                
             }
         }
-        public IActionResult Map()
+        public IActionResult Map(int? id)
         {
+            var customer = _context.Customers.Find(id);
+            ViewBag.Address = customer.Address;
             return View();
         }
         public IActionResult ResetPickUp()
@@ -134,19 +136,12 @@ namespace Trash_Collector_Proj.Controllers
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var employee = await _context.Employees
-                .Include(e => e.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Include(e => e.IdentityUser).FirstOrDefault(c => c.IdentityUserId == userId);
             if (employee == null)
             {
                 return NotFound();
             }
-
             return View(employee);
         }
 
@@ -177,14 +172,10 @@ namespace Trash_Collector_Proj.Controllers
         }
 
         // GET: Employee/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var employee = await _context.Employees.FindAsync(id);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if (employee == null)
             {
                 return NotFound();
@@ -209,6 +200,8 @@ namespace Trash_Collector_Proj.Controllers
             {
                 try
                 {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    employee.IdentityUserId = userId;
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }

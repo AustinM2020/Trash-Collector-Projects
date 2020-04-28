@@ -13,6 +13,7 @@ namespace Trash_Collector_Proj.Controllers
 {
     public class CustomerController : Controller
     {
+        //AIzaSyDJz6GXgT6D1s33zJIec_bLlNKQGv_jXr8
         private readonly ApplicationDbContext _context;
 
         public CustomerController(ApplicationDbContext context)
