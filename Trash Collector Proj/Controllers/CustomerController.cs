@@ -13,7 +13,7 @@ namespace Trash_Collector_Proj.Controllers
 {
     public class CustomerController : Controller
     {
-        //AIzaSyDJz6GXgT6D1s33zJIec_bLlNKQGv_jXr8
+        //
         private readonly ApplicationDbContext _context;
 
         public CustomerController(ApplicationDbContext context)
@@ -29,7 +29,7 @@ namespace Trash_Collector_Proj.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).ToList();
+            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).Include(c => c.WeekDay).ToList();
             if (customer.Count == 0)
             {
                 return RedirectToAction("Create");

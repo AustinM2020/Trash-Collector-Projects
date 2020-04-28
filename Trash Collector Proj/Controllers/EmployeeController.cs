@@ -45,8 +45,8 @@ namespace Trash_Collector_Proj.Controllers
                 if(searchDay == "Today" || searchDay == null)
                 {
                     dayOfWeek = DateTime.Today.DayOfWeek.ToString();
-                    var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today && c.TrashPickedUp == false).ToList();
-                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).ToList();
+                    var customers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today && c.TrashPickedUp == false).Include(c => c.WeekDay).ToList();
+                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.StartDate <= DateTime.Today && c.EndDate >= DateTime.Today).Include(c => c.WeekDay).ToList();
                     foreach (var person in extraDayCustomers)
                     {
                         if (person.ExtraPickUp.HasValue)
@@ -64,8 +64,8 @@ namespace Trash_Collector_Proj.Controllers
                 {
                     dayOfWeek = searchDay;
                     extraDay = searchDay;
-                    var filteredCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).ToList();
-                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode).ToList();
+                    var filteredCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode && c.WeekDay.Name == dayOfWeek).Include(c => c.WeekDay).ToList();
+                    var extraDayCustomers = _context.Customers.Where(c => c.Zipcode == employee.Zipcode).Include(c => c.WeekDay).ToList();
                     foreach (var person in extraDayCustomers)
                     {                       
                         if (person.ExtraPickUp.HasValue)
