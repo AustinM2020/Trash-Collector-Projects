@@ -102,13 +102,10 @@ namespace Trash_Collector_Proj.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Id", customer.WeekDayId);
+            ViewData["WeekDayId"] = new SelectList(_context.WeekDays, "Id", "Name", customer.WeekDayId);
             return View(customer);
         }
 
-        // POST: Customer/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Zipcode,Address,ExtraPickUp,StartDate,EndDate,Balance,IdentityUserId,WeekDayId")] Customer customer)
@@ -122,8 +119,14 @@ namespace Trash_Collector_Proj.Controllers
             {
                 try
                 {
+                    var balance = _context.Customers.Where(c => c.Id == id).Select(c => c.Balance).FirstOrDefault();
+                    var pickUpTime = _context.Customers.Where(c => c.Id == id).Select(c => c.PickUpTIme).FirstOrDefault();
+                    var trashPickedUp = _context.Customers.Where(c => c.Id == id).Select(c => c.TrashPickedUp).FirstOrDefault();
                     var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                     customer.IdentityUserId = userId;
+                    customer.Balance = balance;
+                    customer.PickUpTIme = pickUpTime;
+                    customer.TrashPickedUp = trashPickedUp;
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
