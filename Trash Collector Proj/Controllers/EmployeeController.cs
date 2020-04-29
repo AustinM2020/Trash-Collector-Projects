@@ -42,6 +42,7 @@ namespace Trash_Collector_Proj.Controllers
             else
             {
                 ViewData["CurrentFilter"] = searchDay;
+                ViewBag.Day = searchDay;
                 if(searchDay == "Today" || searchDay == null)
                 {
                     dayOfWeek = DateTime.Today.DayOfWeek.ToString();

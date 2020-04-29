@@ -19,7 +19,7 @@
                 <option value="Friday">Friday</option>
                 <option value="Saturday">Saturday</option>
             </select>
-            <input type="submit" value="Search" class="btn btn-default" />
+            <button type="submit" value="Search" class="btn-primary">Filter</button>
         </h5>
     </div>
 </form>
@@ -65,9 +65,18 @@
                     @Html.DisplayFor(modelItem => item.Balance)
                 </td>
                 <td>
-                    <a asp-action="Map" asp-route-id="@item.Id">Location</a> |
-                    <a asp-action="ChargeCustomer" asp-route-id="@item.Id">Confirm Pick Up</a> |
-                    <a asp-action="CustomerDetails" asp-route-id="@item.Id">Details</a>
+                    @if (ViewBag.Day == "Today" || ViewBag.Day == null)
+                    {
+                        <a asp-action="Map" asp-route-id="@item.Id">Location</a><br />
+                        <a asp-action="ChargeCustomer" asp-route-id="@item.Id">Confirm Pick Up</a><br />
+                        <a asp-action="CustomerDetails" asp-route-id="@item.Id">Details</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Map" asp-route-id="@item.Id">Location</a><br />
+                        <a asp-action="CustomerDetails" asp-route-id="@item.Id">Details</a>
+                    }
+                    
                 </td>
             </tr>
         }
