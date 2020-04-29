@@ -15,6 +15,7 @@ namespace Trash_Collector_Proj.Controllers
     {
         public double pricePerPickup = 5;
         private readonly ApplicationDbContext _context;
+        private readonly string[] apiKeys = System.IO.File.ReadAllLines("ApiKey.txt");
 
         public EmployeeController(ApplicationDbContext context)
         {
@@ -87,6 +88,7 @@ namespace Trash_Collector_Proj.Controllers
         {
             var customer = _context.Customers.Find(id);
             ViewBag.Address = customer.Address;
+            ViewBag.ApiKey = apiKeys[0];
             return View();
         }
         public IActionResult ResetPickUp()
